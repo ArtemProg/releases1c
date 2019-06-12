@@ -84,6 +84,7 @@ def add_release(conf, data_release):
                           from_versions=data_release['from_versions'], configuration=conf)
         db.session.add(release)
         db.session.commit()
+        log('LOAD: {}'.format(release))
 
 
 def log(text):
