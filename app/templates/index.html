@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block panel_content %}
+    <nav class="nav">
+        <h2 class="nav__title">Навигация</h2>
+        <ul class="nav__list nav-page">
+            <li class="nav__item">
+                <a class="link nav__link" href="#current-releases">Актуальные релизы конфигураций</a>
+            </li>
+            <li class="nav__item">
+                <a class="link nav__link" href="#target-releases">Релизы выбранной конфигурации</a>
+            </li>
+        </ul>
+    </nav>
+
+    <aside class="nav external-resources">
+        <h2 class="nav__title">Ссылки на внешние ресурсы</h2>
+        <ul class="nav__list">
+            {% for external_ref in external_links %}
+                {% if 'group' not in external_ref %}
+                <li class="nav__item">
+                    <a class="link nav__link external-resources__link" href="{{ external_ref.href }}" target="_blank" title="{{ external_ref.title }}">{{ external_ref.text }}</a>
+                </li>
+                {% else %}
+                <li class="nav__item nav__group">
+                    <a class="link nav__link external-resources__link nav__menu-toggle" data-controls="#nav__menu" title="{{ external_ref.title }}">{{ external_ref.text }}<span class="caret"></span></a>
+                    <ul class="nav__list nav__menu nav__menu--close" id="nav__menu">
+                        {% for _external_ref in external_ref.href %}
+                        <li class="nav__item">
+                            <a class="link nav__link external-resources__link" href="{{ _external_ref.href }}" target="_blank" title="{{ _external_ref.title }}">{{ _external_ref.text }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </aside>
+{% endblock %}
+
+{% block content %}
+    <div id="current-releases">
+        {% include '_current_releases.html' %}
+    </div>
+    <div id="target-releases">
+        {% include '_target_releases.html' %}
+    </div>
+{% endblock %}

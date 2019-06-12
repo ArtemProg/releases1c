@@ -11,58 +11,6 @@ from app.models import Configuration
 
 def available_configurations():
     return [{'project':conf.project, 'name':conf.name, 'edition':conf.edition, 'description':conf.description} for conf in Configuration.query.all()]
-    # return Configuration.query.all()
-    # configurations = list()
-#     configurations.append(
-#         dict_configuration('Accounting20_82', 'Accounting', '20', 'Бухгалтерия предприятия, редакция 2.0'))
-#     configurations.append(
-#         dict_configuration('AccountingCorp', 'AccountingCorp', '20', 'Бухгалтерия предприятия КОРП, редакция 2.0'))
-#     configurations.append(
-#         dict_configuration('AccountingBase30', 'AccountingBase', '30', 'Бухгалтерия предприятия базовая, редакция 3.0'))
-#     configurations.append(
-#         dict_configuration('Accounting30', 'Accounting', '30', 'Бухгалтерия предприятия, редакция 3.0'))
-#     configurations.append(
-#         dict_configuration('AccountingCorp30', 'AccountingCorp', '30', 'Бухгалтерия предприятия КОРП, редакция 3.0'))
-#     configurations.append(
-#         dict_configuration('DocMngCorp', 'DocMngCorp', '21', 'Документооборот КОРП, редакция 2.1'))
-#     configurations.append(
-#         dict_configuration('DocMng', 'DocMng', '21', 'Документооборот ПРОФ, редакция 2.1'))
-#     configurations.append(
-#         dict_configuration('HRMBase30', 'HRMBase', '31', 'Зарплата и Управление Персоналом базовая, редакция 3'))
-#     configurations.append(
-#         dict_configuration('HRM30', 'HRM', '31', 'Зарплата и Управление Персоналом, редакция 3'))
-#     configurations.append(
-#         dict_configuration('HRMCorp', 'HRMCorp', '25', 'Зарплата и Управление Персоналом КОРП, редакция 2.5'))
-#     configurations.append(
-#         dict_configuration('HRMCorp30', 'HRMCorp', '31', 'Зарплата и Управление Персоналом КОРП, редакция 3'))
-#     configurations.append(
-#         dict_configuration('ARAutomation11', 'ARAutomation', '11', 'Комплексная автоматизация, редакция 1.1'))
-#     configurations.append(
-#         dict_configuration('ARAutomation20', 'ARAutomation', '24', 'Комплексная автоматизация, редакция 2'))
-#     configurations.append(
-#         dict_configuration('Taxes', 'Taxes', '30', 'Налогоплательщик'))
-#     configurations.append(
-#         dict_configuration('RetailBase22', 'RetailBase', '22', 'Розница базовая, редакция 2.2'))
-#     configurations.append(
-#         dict_configuration('Retail22', 'Retail', '22', 'Розница, редакция 2.2'))
-#     configurations.append(
-#         dict_configuration('Enterprise13', 'Enterprise', '13', 'Управление производственным предприятием, редакция 1.3'))
-#     configurations.append(
-#         dict_configuration('TradeBase', 'TradeBase', '103', 'Управление торговлей базовая, редакция 10.3'))
-#     configurations.append(
-#         dict_configuration('Trade103', 'Trade', '103', 'Управление торговлей, редакция 10.3'))
-#     configurations.append(
-#         dict_configuration('TradeBase110', 'TradeBase', '114', 'Управление торговлей базовая, редакция 11'))
-#     configurations.append(
-#         dict_configuration('Trade110', 'Trade', '114', 'Управление торговлей, редакция 11'))
-#     configurations.append(
-#         dict_configuration('EnterpriseERP20', 'Enterprise20', '24', '1С:ERP Управление предприятием 2'))
-#
-#     return configurations
-#
-#
-# def dict_configuration(configuration, name, edition, presentation):
-#     return {'configuration': configuration, 'name': name, 'edition': edition, 'presentation': presentation}
 
 
 def current_configuration_releases():
@@ -159,3 +107,40 @@ def load_v8upd11_zip(name, edition):
                     list_release.append(dir_release)
 
     return list_release[::-1]
+
+
+def external_ref():
+    list_ref = list()
+    list_ref.append(
+        {'href': 'https://releases.1c.ru/total', 'title': 'Доступ по подписке', 'text': '1C:Обновление программ'})
+    list_ref.append(
+        {'href': 'http://v8.1c.ru/lawmonitor/lawchanges.jsp', 'title': '', 'text': 'Новости законодательства от "1С"'})
+    list_ref.append({'href': 'https://its.1c.ru', 'title': '', 'text': 'ИТС'})
+    list_ref.append({'href': 'https://its.1c.ru/db/updinfo', 'title': '',
+                     'text': 'Информация об обновлениях программных продуктов 1С:Предприятие'})
+    list_ref.append({'href': 'https://buh.ru/news/', 'title': '', 'text': 'Новости (buh.ru)'})
+    list_ref.append({'href': 'https://zen.yandex.ru/buh.ru/', 'title': '', 'text': 'Бухгалтерский ДЗЕН'})
+    list_ref.append({'href': 'https://buh.ru/calendar/', 'title': '', 'text': 'Производственный календарь'})
+    list_ref.append({'href': 'https://buh.ru/calendar-nalog/', 'title': '', 'text': 'Календарь бухгалтера'})
+    list_ref.append({'href': 'https://its.1c.ru/db/answers1c', 'title': '', 'text': 'Ответы на вопросы по программам 1С'})
+    list_ref.append({'href': soft_ref(), 'title': '', 'text': 'Полезный софт', 'group': True})
+    return list_ref
+
+
+def soft_ref():
+    list_ref = list()
+    list_ref.append(
+        {'href': 'https://www.teamviewer.com/', 'title': 'Программы удалённого подключения/администрирования',
+         'text': 'TeamViewer'})
+    list_ref.append({'href': 'https://notepad-plus-plus.org/',
+                     'title': 'Текстовый редактор с подсветкой синтаксиса большого количества языков программирования и разметки',
+                     'text': 'Notepad++'})
+    list_ref.append({'href': 'http://app.prntscr.com/', 'title': 'Самый быстрый и удобный способ сделать скриншот',
+                     'text': 'Lightshot'})
+    list_ref.append(
+        {'href': 'https://helpme1c.ru/obnovlyator-1s-gruppovoe-paketnoe-obnovlenie-vsex-baz-za-odin-raz', 'title': '',
+         'text': 'Обновлятор-1С'})
+    list_ref.append({'href': 'https://forum.ruboard.ru/showthread.php/248879',
+                     'title': 'Выложенные программные продукты в целях ознакомления для зарегистрированных пользователей фирмы 1С.',
+                     'text': 'RuBoard'})
+    return list_ref

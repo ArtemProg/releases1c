@@ -1,0 +1,29 @@
+{% block current_releases %}
+<article class="page">
+    <div class="page-header">
+        <h2 class="title">Актуальные релизы конфигураций</h2>
+    </div>
+    <div class="page-content">
+        <div class="table-responsive">
+            <table class="table font-size-small-sm">
+                <caption class="table__caption">Обновление программ: <a class="link" href="https://releases.1c.ru/total" target="_blank" title="Перейти на сайт &#171;releases.1c.ru&#187; в раздел &#171;1C:Обновление программ&#187;">[releases.1c.ru]</a></caption>
+                <thead class="table__thead">
+                    <tr class="table__row">
+                        <th class="table__cell table__cell--header table__cell--number-row" rowspan="2">№</th>
+                        <th class="table__cell table__cell--header table__cell--name-head" rowspan="2">Название</th>
+                        <th class="table__cell table__cell--header table__cell--actual-version" colspan="3">Актуальная версия</th>
+                        <th class="table__cell table__cell--header table__cell--previous-versions" rowspan="2">Обновление версии</th>
+                    </tr>
+                    <tr class="table__row">
+                        <th class="table__cell table__cell--header-normal table__cell--version-column">Номер версии</th>
+                        <th class="table__cell table__cell--header-normal table__cell--release-date">Дата выхода</th>
+                        <th class="table__cell table__cell--header-normal table__cell--info-update">Новое в версии</th>
+                    </tr>
+                </thead>
+                <tbody class="table__tbody current-version-applications">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</article>
+{% endblock %}

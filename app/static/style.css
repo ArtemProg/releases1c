@@ -696,6 +696,12 @@ body {
 	background-color: #dbdbdb;
 }
 
+.nav__menu-title {
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #777;
+}
+
 .nav__link {
 	display: block;
 	padding-left: 20px;
@@ -717,6 +723,30 @@ body {
 	background-color: #e7e7e7;
 }
 
+.nav__menu {
+    padding-left: 10px;
+}
+
+.nav__menu-toggle {
+    text-transform: uppercase;
+    color: #777;
+}
+
+.nav__menu--close {
+    height: 0px;
+    display: none;
+}
+
+.caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+}
 
 .external-resources {
 	margin-top: 100px;

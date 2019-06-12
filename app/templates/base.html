@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{% if title %}{{ title }}{% else %}releases{% endif %}</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+	<link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+	
+	<div class="container">
+	
+		<div class="header">
+			<header class="panel-fixed-top">
+				<button class="hamburger">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<div class="logo-box logo-box--sm">
+					<a class="logo-link" href="#">{% if title %}{{ title }}{% else %}releases{% endif %}</a>
+				</div>
+			</header>
+			<div class="panel-fixsed-left">
+				<div class="logo-box">
+					<a class="logo-link" href="#">{% if title %}{{ title }}{% else %}releases{% endif %}</a>
+				</div>
+				{% block panel_content%}{% endblock %}
+			</div>
+		</div>
+
+		<main class="wrapper">
+			{% block content %}{% endblock %}
+		</main>
+
+		<footer class="footer">
+			<ul class="footer__list">
+				<li class="footer__item footer__item-copy">© 2011—2019  Artem S.</li>
+				<li class="footer__item footer__item-about"><a class="footer__link" target="_blank" href="https://infostart.ru/profile/369158/">о проекте</a></li>
+			</ul>
+		</footer>
+	
+	</div>
+	
+	<script src="static/script.js"></script>
+	
+</body>
+
+</html>

@@ -1,0 +1,100 @@
+{% block target_releases %}
+<article class="page">
+    <div class="page-header">
+        <h2 class="title">Релизы выбранной конфигурации</h2>
+    </div>
+    <div class="page-content">
+
+        <div class="setting">
+            <div class="setting__box">
+                <div class="setting__item">
+                    <label class="setting__label" for="select-configuration">Конфигурация:</label>
+                    <select class="setting__element setting__select-configuration" id="select-configuration"></select>
+                </div>
+                <div class="setting__item font-size-small">
+                    <label class="setting__label">Всего релизов:</label>
+                    <span class="setting__text setting__text--count-version">0</span>
+                </div>
+            </div>
+
+            <div class="setting__box calculator-updates__box-setting">
+
+                <div class="setting__box calculator-updates__header-setting">
+                    <div class="setting__item">
+                        <div class="switch">
+                            <label class="switch__label" title="Перейти в режим &#171;Калькулятор обновлений 1С&#187;">
+                                <input type="checkbox" class="switch__checkbox calculator-updates__checkbox" id="calculator-updates__checkbox">
+                                <span class="switch__slider"></span>
+                            </label>
+                            <label class="setting__label switch__header calculator-updates__label-header" for="calculator-updates__checkbox">Калькулятор обновлений</label>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="setting__box">
+                    <fieldset class="calculator-updates__group" disabled>
+                        <legend class="calculator-updates__group-legend">Калькулятор обновлений</legend>
+
+
+                        <div class="setting__box clearfix">
+                            <div class="setting__item setting__item--margin-right-5 float-left">
+                                <label class="setting__label" for="version-initial">с:</label>
+                                <select class="setting__element calculator-updates__version-initial" id="version-initial"></select>
+                            </div>
+                            <div class="setting__item float-left">
+                                <label class="setting__label" for="version-final">на:</label>
+                                <select class="setting__element calculator-updates__version-final" id="version-final"></select>
+                            </div>
+                        </div>
+
+                        <div class="setting__box calculator-updates__result-box">
+                            <div class="setting__item">
+                                <label class="setting__label">Список релизов:</label>
+                                <div class="setting__element calculator-updates__result-list"></div>
+                            </div>
+                            <div class="setting__item">
+                                <label class="setting__label">Количество:</label>
+                                <span class="setting__text calculator-updates__result-count">0</span>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table">
+                <caption class="table__caption">Релизы конфигурации: <a class="link table__caption-link" href="" target="_blank" title="Перейти на сайт &#171;releases.1c.ru&#187; к релизам выбранной конфигурации">НЕОПРЕДЕЛЕНО</a></caption>
+                <thead class="table__thead">
+                    <tr class="table__row">
+                        <th class="table__cell table__cell--header table__cell--number-row">№</th>
+                        <th class="table__cell table__cell--header table__cell--version-column">Номер версии</th>
+                        <th class="table__cell table__cell--header table__cell--info-update">Новое в версии</th>
+                        <th class="table__cell table__cell--header table__cell--previous-versions">Обновление версии</th>
+                        <th class="table__cell table__cell--header table__cell--size-file">Размер файла обновления (Мб)</th>
+                    </tr>
+                </thead>
+                <tbody class="table__tbody all-versions-application">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="setting">
+            <div class="setting__box clearfix">
+                <div class="setting__item float-right font-size-small">
+                    <label class="setting__label" for="table-count-row" title="Количество строк таблицы отображаемых на экране">Количество строк:</label>
+                    <input class="setting__element setting__element--count-row-table" type="number" min="10" max="500" step="5" value="20" id="table-count-row" title="Количество строк таблицы отображаемых на экране">
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination-block">
+            <ul class="pagination" data-toggle=".all-versions-application">
+            </ul>
+        </div>
+
+    </div>
+</article>
+{% endblock %}

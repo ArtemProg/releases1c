@@ -2,16 +2,18 @@
 document.addEventListener("DOMContentLoaded", function () {
 
 	// addEventListener {
+	window.addEventListener('scroll', eventScrollWindow);
 	document.querySelector('.hamburger').addEventListener('click', eventClickHamburger);
+	document.querySelector('.nav-page').addEventListener('click', eventClickNavLinkPage); // плавный скролл
 	document.querySelector('.setting__select-configuration').addEventListener('change', eventChangeConfiguration);
 	document.querySelector('.setting__element--count-row-table').addEventListener('change', eventСhangeTableCountRow);
 	document.querySelector('.setting__element--count-row-table').addEventListener('input', eventInputTableCountRow);
 	document.querySelector('.pagination').addEventListener('click', eventClickPaginationTable);
 	document.querySelector('.calculator-updates__box-setting').addEventListener('change', eventChangeSettingCalculatorUpdates);
-	document.querySelector('.nav-page').addEventListener('click', eventClickNavLinkPage);
-	window.addEventListener('scroll', eventScrollWindow);
+	[...document.querySelectorAll('.nav__menu-toggle')].map(el => el.addEventListener('click', eventClickNavGroup));
 	// }
-	
+
+	eventScrollWindow(undefined);
 	runLoadConfigurations();
 	
 });
@@ -76,7 +78,12 @@ function eventScrollWindow(event) {
 		arrNavLink = document.querySelectorAll('.nav-page .nav__link'),
 		delta = 200, // доп отступ сверху
 		targetIndexLink = 0;
-	
+
+	if (!arrNavLink) {
+	    window.removeEventListener('scroll', eventScrollWindow);
+	    return;
+	}
+
 	for (let i = 0; i < arrNavLink.length; i++) {
 		let elLink = arrNavLink[i],
 			hash = elLink.href.replace(/[^#]*(.*)/, '$1'),
@@ -100,6 +107,13 @@ function eventScrollWindow(event) {
 		elActive.classList.add(navClassItem);
 	}
 	
+}
+
+function eventClickNavGroup(event) {
+    let el = event.target,
+        controlId = el.getAttribute('data-controls'),
+        elControl = document.querySelector(controlId);
+    toggleClass(elControl, 'nav__menu--close');
 }
 
 // КОНЕЦ: ОБРАБОТЧИКИ СОБЫТИЙ
