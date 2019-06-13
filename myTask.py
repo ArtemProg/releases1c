@@ -2,7 +2,7 @@
 
 import requests
 from datetime import datetime
-from pytz import timezone
+from pytz import timezone, utc
 from app import db
 from app.models import Configuration, Release
 
@@ -74,8 +74,9 @@ def current_configuration_release(conf):
     update_date = list_res[2].replace('UpdateDate=', '')
 
     date = timezone('Europe/Moscow').localize(datetime.strptime(update_date, '%d.%m.%Y'), is_dst=None)
+    date_utc = date.astimezone(utc)
 
-    return {'version': version, 'from_versions': from_versions, 'date': date}
+    return {'version': version, 'from_versions': from_versions, 'date': date_utc}
 
 
 def add_release(conf, data_release):
