@@ -90,7 +90,7 @@ def add_release(conf, data_release):
 
 def log(text):
     try:
-        with open('ligInfo.log', 'a') as outFile:
+        with open('logInfo.log', 'a') as outFile:
             outFile.write('\n' + str(datetime.now()) + '   ' + text)
     except:
         pass

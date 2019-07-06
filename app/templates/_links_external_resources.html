@@ -1,0 +1,48 @@
+{% block links_external_resources %}
+<article class="page">
+    <div class="page-header">
+        <h2 class="title">Ссылки на внешние ресурсы</h2>
+    </div>
+    <div class="page-content">
+        <div class="table-responsive">
+            <table class="table font-size-small-sm">
+                <caption class="table__caption">Список полезных ссылок</caption>
+                <thead class="table__thead">
+                    <tr class="table__row">
+                        <th class="table__cell table__cell--header table__cell--number-row">№</th>
+                        <th class="table__cell table__cell--header">text</th>
+                        <th class="table__cell table__cell--header">href</th>
+                        <th class="table__cell table__cell--header">title</th>
+                    </tr>
+                </thead>
+                <tbody class="table__tbody">
+                {% for external_ref in external_links %}
+                {% if 'group' not in external_ref %}
+                    <tr class="table__row">
+                        <td class="table__cell table__cell--number-row">{{ external_links.index(external_ref)+1 }}</td>
+                        <td class="table__cell table__cell--text-left">{{ external_ref.text }}</td>
+                        <td class="table__cell table__cell--text-left">{{ external_ref.href }}</td>
+                        <td class="table__cell table__cell--text-left">{{ external_ref.title }}</td>
+                    </tr>
+                {% else %}
+                    <tr class="table__row">
+                        <td class="table__cell table__cell--number-row">{{ external_links.index(external_ref)+1 }}</td>
+                        <th class="table__cell table__cell--text-left" colspan="2">{{ external_ref.text }}</th>
+                        <td class="table__cell table__cell--text-left">{{ external_ref.title }}</td>
+                    </tr>
+                    {% for _external_ref in external_ref.href %}
+                    <tr class="table__row">
+                        <td class="table__cell table__cell--number-row">{{ (external_links.index(external_ref)+1) + (external_ref.href.index(_external_ref)+1) / 10 }}</td>
+                        <td class="table__cell table__cell--text-left">{{ _external_ref.text }}</td>
+                        <td class="table__cell table__cell--text-left">{{ _external_ref.href }}</td>
+                        <td class="table__cell table__cell--text-left">{{ _external_ref.title }}</td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</article>
+{% endblock %}

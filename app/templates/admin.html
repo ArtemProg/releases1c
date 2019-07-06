@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block panel_content %}
+    <nav class="nav">
+        <h2 class="nav__title">Навигация</h2>
+        <ul class="nav__list nav-page">
+            <li class="nav__item">
+                <a class="link nav__link" href="#configuration-setting">Настройки конфигураций</a>
+            </li>
+            <li class="nav__item">
+                <a class="link nav__link" href="#links-external-resources">Ссылки на внешние ресурсы</a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div id="configuration-setting">
+        {% include '_configuration_setting.html' %}
+    </div>
+    <div id="links-external-resources">
+        {% include '_links_external_resources.html' %}
+    </div>
+    {% include '_action_element.html' %}
+{% endblock %}
+
+{% block script %}
+<script src="static/script-admin.js"></script>
+{% endblock %}

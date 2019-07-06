@@ -21,6 +21,22 @@
                     </tr>
                 </thead>
                 <tbody class="table__tbody current-version-applications">
+                    {% for release in releases %}
+                    <tr class="table__row">
+                        <td class="table__cell table__cell--number-row">{{ releases.index(release)+1 }}</td>
+                        <td class="table__cell table__cell--name-head"><a class="link" target="_blank" href="https://releases.1c.ru/project/{{ release.configuration.project }}">{{ release.configuration.description }}</a></td>
+                        <td class="table__cell table__cell--version-column"><a class="link" target="_blank" href="https://releases.1c.ru/version_files?nick={{ release.configuration.project }}&ver={{ release.version }}">{{ release.version }}</a></td>
+                        <td class="table__cell table__cell--release-date">{% if release.days_difference <= 10 %}<b class="text-important">{{ release.date_mos }}</b>{% else %}{{ release.date_mos }}{% endif %}</td>
+                        <td class="table__cell table__cell--info-update"><a class="link" target="_blank" href="http://downloads.v8.1c.ru/content/{{ release.configuration.name }}/{{ release.version_ }}/news.htm">news</a></td>
+                        <td class="table__cell table__cell--previous-versions">
+                            <ul class="list-version clearfix">
+                                {% for version in release.from_versions_list %}
+                                <li class="item-version"><a class="link" target="_blank" href="https://releases.1c.ru/version_files?nick={{ release.configuration.project }}&ver={{ version }}">{{ version }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

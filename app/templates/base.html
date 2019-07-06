@@ -22,12 +22,12 @@
 					<span class="icon-bar"></span>
 				</button>
 				<div class="logo-box logo-box--sm">
-					<a class="logo-link" href="#">{% if title %}{{ title }}{% else %}releases{% endif %}</a>
+					<a class="logo-link" href="{{ url_for('index') }}">{% if title %}{{ title }}{% else %}releases{% endif %}</a>
 				</div>
 			</header>
 			<div class="panel-fixsed-left">
 				<div class="logo-box">
-					<a class="logo-link" href="#">{% if title %}{{ title }}{% else %}releases{% endif %}</a>
+					<a class="logo-link" href="{{ url_for('index') }}">{% if title %}{{ title }}{% else %}releases{% endif %}</a>
 				</div>
 				{% block panel_content%}{% endblock %}
 			</div>
@@ -40,14 +40,21 @@
 		<footer class="footer">
 			<ul class="footer__list">
 				<li class="footer__item footer__item-copy">© 2011—2019  Artem S.</li>
-				<li class="footer__item footer__item-about"><a class="footer__link" target="_blank" href="https://infostart.ru/profile/369158/">о проекте</a></li>
+				<li class="footer__item footer__item-about"><a class="footer__link" href="{{ url_for('index') }}">Главная</a></li>
+				{% if current_user.is_anonymous %}
+				<li class="footer__item footer__item-about"><a class="footer__link" href="{{ url_for('login') }}">Войти</a></li>
+				{% else %}
+				<li class="footer__item footer__item-about"><a class="footer__link" href="{{ url_for('admin') }}">Настройки</a></li>
+				<li class="footer__item footer__item-about"><a class="footer__link" href="{{ url_for('logout') }}">Выход</a></li>
+				{% endif %}
 			</ul>
 		</footer>
 	
 	</div>
 	
 	<script src="static/script.js"></script>
-	
+	{% block script%}{% endblock %}
+
 </body>
 
 </html>

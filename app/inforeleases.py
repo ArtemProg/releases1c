@@ -6,11 +6,25 @@ import zipfile
 import xml.etree.ElementTree as et
 from datetime import datetime
 from pytz import timezone
-from app.models import Configuration
+from app.models import Configuration, Release
+from app import db
 
 
 def available_configurations():
-    return [{'project':conf.project, 'name':conf.name, 'edition':conf.edition, 'description':conf.description} for conf in Configuration.query.all()]
+    return [{'project': conf.project, 'name': conf.name, 'edition': conf.edition, 'description': conf.description} for conf in Configuration.query.all()]
+
+
+def configurations():
+    return Configuration.query.all()
+
+
+def current_configuration_releases_new():
+    r = list()
+    for configuration in Configuration.query.filter_by(active=True).all():
+        release = configuration.releases.order_by(Release.date.desc()).first()
+        if not (release is None):
+            r.append(release)
+    return r
 
 
 def current_configuration_releases():
@@ -144,3 +158,83 @@ def soft_ref():
                      'title': 'Выложенные программные продукты в целях ознакомления для зарегистрированных пользователей фирмы 1С.',
                      'text': 'RuBoard'})
     return list_ref
+
+
+def change_configuration(configuration, action):
+    result = {'Data': None, 'Error': False, 'TextError': ''}
+
+    if action == 'append':
+        result = add_configuration(configuration)
+    elif action == 'delete':
+        result = delete_configuration(configuration)
+    elif action == 'edit':
+        result = edit_configuration(configuration)
+    else:
+        result['Error'] = True
+        result['TextError'] = 'Выбранное действие не найдено'
+
+    return result
+
+
+def add_configuration(dict_conf):
+    result = {'Data': None, 'Error': False, 'TextError': ''}
+
+    if Configuration.query.filter((Configuration.project == dict_conf['project']) | (
+            Configuration.description == dict_conf['description'])).first() is None:
+        del dict_conf['id']
+        conf = Configuration(**dict_conf)
+        db.session.add(conf)
+        db.session.commit()
+
+        result['Data'] = conf.id
+    else:
+        result['Error'] = True
+        result['TextError'] = 'Конфигурация с подобными полями уже существует'
+
+    return result
+
+
+def delete_configuration(dict_conf):
+    result = {'Data': None, 'Error': False, 'TextError': ''}
+
+    db.session.query(Release).filter_by(configuration_id=dict_conf['id']).delete()
+    db.session.query(Configuration).filter_by(id=dict_conf['id']).delete()
+    db.session.commit()
+
+    return result
+
+
+def edit_configuration(dict_conf):
+    result = {'Data': None, 'Error': False, 'TextError': ''}
+
+    conf = Configuration.query.filter_by(id=dict_conf['id']).first()
+    if not (conf is None):
+        save_conf = False
+        if conf.description != dict_conf['description']:
+            conf.description = dict_conf['description']
+            save_conf = True
+        if conf.project != dict_conf['project']:
+            conf.project = dict_conf['project']
+            save_conf = True
+        if conf.name != dict_conf['name']:
+            conf.name = dict_conf['name']
+            save_conf = True
+        if conf.edition != int(dict_conf['edition']):
+            conf.edition = int(dict_conf['edition'])
+            save_conf = True
+        if conf.active != bool(dict_conf['active']):
+            conf.active = bool(dict_conf['active'])
+            save_conf = True
+
+        # for key, value in dict_conf.items():
+        #     if value != conf.__getattribute__(key):
+        #         print(key, value, conf.__getattribute__(key))
+
+        if save_conf:
+            db.session.commit()
+
+    else:
+        result['Error'] = True
+        result['TextError'] = 'Конфигурация не найдена'
+
+    return result

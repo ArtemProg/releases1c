@@ -1,0 +1,59 @@
+{% block action_element %}
+<div class="overlay">
+    <div class="popup">
+        <div class="popup-close popup-btn-close">&times;</div>
+        <div class="popup-title">Заголовок</div>
+        <div class="popup-form">
+            <form name="config" action="save" method="post" class="action-form" novalidate>
+                {{ form.hidden_tag() }}
+                <input type="hidden" id="rowIndex">
+                <fieldset class="fieldset">
+                    <legend class="fieldset-legend">Настройки конфигурации</legend>
+                    <div class="table-responsive">
+                        <table class="table font-size-small-sm">
+                            <tbody class="table__tbody">
+                                <tr class="table__row">
+                                    <td><label class="setting__label" for="element-id" title="Идентификатор элемента в базе данных">id:</label></td>
+                                    <td><input class="setting__element" type="number" id="element-id" title="Идентификатор элемента в базе данных" disabled></td>
+                                </tr>
+                                <tr class="table__row">
+                                    <td colspan="2"><label class="setting__label" for="element-description" title="Наименование конфигурации">description:</label></td>
+                                </tr>
+                                <tr class="table__row">
+                                    <td colspan="2"><textarea class="setting__element-textarea" id="element-description" title="Наименование конфигурации" required></textarea></td>
+                                </tr>
+                                <tr class="table__row">
+                                    <td><label class="setting__label" for="element-project" title="Имя проекта">project:</label></td>
+                                    <td><input class="setting__element" id="element-project" title="Имя проекта" required></td>
+                                </tr>
+                                <tr class="table__row">
+                                    <td><label class="setting__label" for="element-name" title="Сокращенное имя проекта">name:</label></td>
+                                    <td><input class="setting__element" id="element-name" title="Сокращенное имя проекта" required></td>
+                                </tr>
+                                <tr class="table__row">
+                                    <td><label class="setting__label" for="element-edition" title="Версия редакции">edition:</label></td>
+                                    <td><input class="setting__element" type="number" id="element-edition" title="Версия редакции" required></td>
+                                </tr>
+                                <tr class="table__row">
+                                    <td><label class="setting__label" for="element-active" title="Активность">active:</label></td>
+                                    <td><input class="setting__element" type="checkbox" id="element-active" title="Активность"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
+                <div class="setting">
+                    <div class="setting__box clearfix">
+                        <div class="setting__item setting__item--margin-right-5 float-left">
+                            <button class="setting__element action-element" data-action="save" data-controls="admin-configuration-setting" title="Добавить конфигурацию">Сохранить</button>
+                        </div>
+                        <div class="setting__item float-left">
+                            <button class="setting__element popup-btn-close" title="Закрыть">Отменить</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

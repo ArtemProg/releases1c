@@ -1,7 +1,27 @@
 # -*- coding: utf-8 -*-
 
 from app import db
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
+from app import login
 from datetime import datetime
+from pytz import timezone, utc
+
+
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), index=True, unique=True)
+    email = db.Column(db.String(120), index=True, unique=True)
+    password_hash = db.Column(db.String(128))
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
 
 
 class Configuration(db.Model):
@@ -10,6 +30,7 @@ class Configuration(db.Model):
     project = db.Column(db.String(128), index=True, unique=True)
     name = db.Column(db.String(128), index=True)
     edition = db.Column(db.Integer)
+    active = db.Column(db.Boolean, default=False)
     releases = db.relationship('Release', backref='configuration', lazy='dynamic')
 
     def __repr__(self):
@@ -28,3 +49,25 @@ class Release(db.Model):
 
     def __repr__(self):
         return '{}, версия {}'.format(self.configuration, self.version)
+
+    @property
+    def version_(self):
+        return self.version.replace('.', '_')
+
+    @property
+    def from_versions_list(self):
+        return [version for version in self.from_versions.split(';') if version]
+
+    @property
+    def date_mos(self):
+        date = utc.localize(self.date, is_dst=None).astimezone(timezone('Europe/Moscow'))
+        return date.strftime("%d.%m.%y")
+
+    @property
+    def days_difference(self):
+        return abs((datetime.now() - self.date).days)
+
+
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))

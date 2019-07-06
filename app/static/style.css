@@ -122,7 +122,8 @@ body {
 }
 
 .footer__link {
-	color: #3b86c4;
+	/*color: #3b86c4;*/
+	color: #9d9d9d;
 	text-decoration: none;
 	cursor: pointer;
 }
@@ -212,7 +213,8 @@ body {
 .setting,
 .setting__item,
 .setting__label,
-.setting__element {
+.setting__element,
+.setting__element-textarea {
 	box-sizing: border-box;
 	max-width: 100%;
 }
@@ -237,6 +239,10 @@ body {
 	border-radius: 1px;
 }
 
+.setting__element-textarea {
+    min-width: 99%;
+    min-height: 60px;
+}
 
 .setting__element--count-row-table {
 	width: 60px;
@@ -409,7 +415,8 @@ body {
 }
 
 .item-version {
-	display: inline-block;
+	/*display: inline-block;*/
+	float: left;
 }
 
 .item-version:not(:last-child):after {
@@ -451,6 +458,9 @@ body {
 	vertical-align: middle;
 }
 
+.table__cell--text-left {
+	text-align: left;
+}
 
 @media screen and (max-width: 500px) {
 	.table__cell {
@@ -759,3 +769,92 @@ body {
 
 /* КОНЕЦ: РЕСУРСЫ */
 /********************************************************************/
+
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.overlay {
+	position: fixed;
+	display: none;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.7);
+	z-index: 9998;
+}
+
+.overlay--active {
+	display: block;
+}
+
+.overlay .popup {
+    position: fixed;
+    z-index: 9999;
+    left: 50%;
+    top: 50%;
+    box-sizing: border-box;
+    /*max-width: 600px;*/
+    padding: 10px;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    -ms-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+
+    border-radius: 0;
+    border-width: 1px 1px 0 0;
+    border-style: solid;
+    background-color: #f8f8f8;
+    border-color: #e7e7e7;
+}
+
+.overlay .popup-close {
+    position: absolute;
+    right: -20px;
+    top: -35px;
+    cursor: pointer;
+    font-size: 35px;
+    color: #fff;
+    font-weight: 300;
+}
+
+.overlay .popup-title {
+    display: block;
+    width: 100%;
+    height: 71px;
+    line-height: 71px;
+    margin: 0;
+    color: #4B4B4B;
+    text-transform: uppercase;
+    font-size: 21px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.action-form .table__row {
+    border: none;
+}
+
+.btn {
+    cursor: pointer;
+    display: inline-block;
+    height: 100%;
+    min-height: 26px;
+    background-color: inherit;
+    border: none;
+}
+
+.margin-top-50 {
+    margin-top: 50px;
+}
+
+.fieldset {
+    border: 1px solid #A9A9A9;
+    padding: 5px;
+}
+
+.fieldset-legend {
+    text-transform: uppercase;
+    color: #A9A9A9;
+}

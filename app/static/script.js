@@ -2,19 +2,43 @@
 document.addEventListener("DOMContentLoaded", function () {
 
 	// addEventListener {
-	window.addEventListener('scroll', eventScrollWindow);
-	document.querySelector('.hamburger').addEventListener('click', eventClickHamburger);
-	document.querySelector('.nav-page').addEventListener('click', eventClickNavLinkPage); // плавный скролл
-	document.querySelector('.setting__select-configuration').addEventListener('change', eventChangeConfiguration);
-	document.querySelector('.setting__element--count-row-table').addEventListener('change', eventСhangeTableCountRow);
-	document.querySelector('.setting__element--count-row-table').addEventListener('input', eventInputTableCountRow);
-	document.querySelector('.pagination').addEventListener('click', eventClickPaginationTable);
-	document.querySelector('.calculator-updates__box-setting').addEventListener('change', eventChangeSettingCalculatorUpdates);
+	window.addEventListener('scroll', eventScrollWindow); // прокрутка страницы и активация нужного пункта меню
+	document.querySelector('.hamburger').addEventListener('click', eventClickHamburger); // нажатие на гамбургер
+
+	nav_page = document.querySelector('.nav-page');
+	if (nav_page)  {
+	    nav_page.addEventListener('click', eventClickNavLinkPage); // плавный скролл при клике навигации по странице
+	}
+
+	setting__select_configuration = document.querySelector('.setting__select-configuration');
+	if (setting__select_configuration)  {
+	    setting__select_configuration.addEventListener('change', eventChangeConfiguration);
+	}
+
+	setting__element__count_row_table = document.querySelector('.setting__element--count-row-table');
+	if (setting__element__count_row_table) {
+        setting__element__count_row_table.addEventListener('change', eventСhangeTableCountRow);
+        setting__element__count_row_table.addEventListener('input', eventInputTableCountRow);
+    }
+
+	pagination = document.querySelector('.pagination');
+	if (pagination) {
+	    pagination.addEventListener('click', eventClickPaginationTable);
+	}
+
+	calculator_updates__box_setting = document.querySelector('.calculator-updates__box-setting');
+	if (calculator_updates__box_setting) {
+	    calculator_updates__box_setting.addEventListener('change', eventChangeSettingCalculatorUpdates);
+	}
+
 	[...document.querySelectorAll('.nav__menu-toggle')].map(el => el.addEventListener('click', eventClickNavGroup));
 	// }
 
 	eventScrollWindow(undefined);
-	runLoadConfigurations();
+
+	if (setting__select_configuration) {
+	    runLoadConfigurations();
+	}
 	
 });
 
@@ -79,7 +103,7 @@ function eventScrollWindow(event) {
 		delta = 200, // доп отступ сверху
 		targetIndexLink = 0;
 
-	if (!arrNavLink) {
+	if (!arrNavLink.length) {
 	    window.removeEventListener('scroll', eventScrollWindow);
 	    return;
 	}
@@ -169,7 +193,7 @@ function loadConfigurations(data, params) {
 
 	Window.settingConf = settingConf;
 
-	runLoadCurrentVersionApplications();
+	//runLoadCurrentVersionApplications();
 	runLoadAllVersionsApplication(data[0].project, data[0].description);
 }
 
@@ -347,6 +371,7 @@ function createElPreviousVersions(project, fromVersions) {
 	
 	let elParrent = document.createElement('ul');
 	elParrent.classList.add("list-version");
+	elParrent.classList.add("clearfix");
 	
 	arr.forEach(function(version, index) {
 		if (!version) {
