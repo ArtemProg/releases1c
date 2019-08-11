@@ -8,11 +8,20 @@ from datetime import datetime
 from pytz import timezone, utc
 
 
+followers = db.Table('followers',
+                     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                     db.Column('configuration_id', db.Integer, db.ForeignKey('configuration.id'))
+                     )
+
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+
+    configurations = db.relationship('Configuration', secondary=followers, backref=db.backref('users', lazy='dynamic'),
+                                     lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -22,6 +31,17 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
+    def configuration_append(self, configuration):
+        if not self.configuration_exists(configuration):
+            self.configurations.append(configuration)
+
+    def configuration_remove(self, configuration):
+        if not self.configuration_exists(configuration):
+            self.configurations.remove(configuration)
+
+    def configuration_exists(self, configuration):
+        return self.configurations.filter(followers.c.configuration_id == configuration.id).count() > 0
 
 
 class Configuration(db.Model):
@@ -35,6 +55,17 @@ class Configuration(db.Model):
 
     def __repr__(self):
         return '{}'.format(self.description)
+
+    def user_append(self, user):
+        if not self.user_exists(user):
+            self.users.append(user)
+
+    def user_remove(self, user):
+        if not self.user_exists(user):
+            self.users.remove(user)
+
+    def user_exists(self, user):
+        return self.users.filter(followers.c.user_id == user.id).count() > 0
 
 
 class Release(db.Model):

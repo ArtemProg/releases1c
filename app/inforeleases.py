@@ -11,7 +11,7 @@ from app import db
 
 
 def available_configurations():
-    return [{'project': conf.project, 'name': conf.name, 'edition': conf.edition, 'description': conf.description} for conf in Configuration.query.all()]
+    return [{'project': conf.project, 'name': conf.name, 'edition': conf.edition, 'description': conf.description} for conf in Configuration.query.filter_by(active=True).all()]
 
 
 def configurations():
@@ -20,7 +20,7 @@ def configurations():
 
 def current_configuration_releases_new():
     r = list()
-    for configuration in Configuration.query.filter_by(active=True).all():
+    for configuration in Configuration.query.filter_by(active=True).order_by(Configuration.description).all():
         release = configuration.releases.order_by(Release.date.desc()).first()
         if not (release is None):
             r.append(release)

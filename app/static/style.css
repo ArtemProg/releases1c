@@ -532,6 +532,19 @@ body {
 	text-align: left;
 }
 
+@media screen and (min-width: 900px) {
+    .table__tbody .table__cell--name-head {
+        width: 300px;
+    }
+}
+
+@media screen and (min-width: 1240px) {
+    .table__tbody .table__cell--name-head {
+        width: 440px;
+    }
+}
+
+
 /* КОНЕЦ: ИМЕНОВАННЫЕ КЛОНКИ ТАБЛИЦ */
 
 

@@ -5,6 +5,8 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Релизы 1С и актуальные версии программ 1С; Калькулятор обновлений 1С; Ссылки на releases.1c.ru"/>
+	<meta name="yandex-verification" content="30f4a3d58174792e" />
 	<title>{% if title %}{{ title }}{% else %}releases{% endif %}</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
 	<link rel="stylesheet" href="static/style.css">
@@ -45,6 +47,7 @@
 				<li class="footer__item footer__item-about"><a class="footer__link" href="{{ url_for('login') }}">Войти</a></li>
 				{% else %}
 				<li class="footer__item footer__item-about"><a class="footer__link" href="{{ url_for('admin') }}">Настройки</a></li>
+				<li class="footer__item footer__item-about"><a class="footer__link" href="{{ url_for('profile') }}">Профиль</a></li>
 				<li class="footer__item footer__item-about"><a class="footer__link" href="{{ url_for('logout') }}">Выход</a></li>
 				{% endif %}
 			</ul>

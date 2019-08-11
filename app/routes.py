@@ -23,8 +23,16 @@ def index():
 @login_required
 def admin():
     form = LoginForm()
-    return render_template('admin.html', title='Релизы', configurations=configurations(), external_links=external_ref(),
+    return render_template('admin.html', title='Релизы: Настройки',
+                           configurations=configurations(),
+                           external_links=external_ref(),
                            form=form)
+
+
+@app.route("/profile")
+@login_required
+def profile():
+    return render_template('profile.html', title='Релизы: Профиль')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -61,7 +69,7 @@ def set_configuration():
 
 
 @app.route('/api/configuration', methods=['GET'])
-@cache.cached(timeout=1800)
+# @cache.cached(timeout=1800)
 def get_available_configurations():
     return jsonify(available_configurations())
 

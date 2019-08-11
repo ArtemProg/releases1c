@@ -107,7 +107,7 @@ def start():
         db.session.commit()
 
     log('load configurations')
-    configurations = Configuration.query.all()
+    configurations = Configuration.query.filter_by(active=True).all()
     for conf in configurations:
         data_release = current_configuration_release(conf)
         if data_release is None:
