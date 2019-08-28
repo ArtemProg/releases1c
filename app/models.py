@@ -20,8 +20,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
 
-    configurations = db.relationship('Configuration', secondary=followers, backref=db.backref('users', lazy='dynamic'),
-                                     lazy='dynamic')
+    configurations = db.relationship("Configuration", secondary=followers, back_populates="users", lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -43,6 +42,15 @@ class User(UserMixin, db.Model):
     def configuration_exists(self, configuration):
         return self.configurations.filter(followers.c.configuration_id == configuration.id).count() > 0
 
+    def configurations_all(self):
+        # конфигурации с признаком отслеживания пользователем
+        xpr = db.case([(followers.c.user_id != None, True), ], else_=False).label("active")
+        query = db.session.query(Configuration, xpr)\
+            .outerjoin(followers,
+                       db.and_(Configuration.id == followers.c.configuration_id, self.id == followers.c.user_id))\
+            .filter(Configuration.active == True).order_by(Configuration.description)
+        return query
+
 
 class Configuration(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -52,6 +60,8 @@ class Configuration(db.Model):
     edition = db.Column(db.Integer)
     active = db.Column(db.Boolean, default=False)
     releases = db.relationship('Release', backref='configuration', lazy='dynamic')
+
+    users = db.relationship("User", secondary=followers, back_populates="configurations", lazy='dynamic')
 
     def __repr__(self):
         return '{}'.format(self.description)
