@@ -3,7 +3,7 @@
 from app import app, cache
 from flask import render_template, jsonify, request, url_for, redirect
 from werkzeug.urls import url_parse
-from app.inforeleases import available_configurations, current_configuration_releases, configuration_release_table, external_ref, soft_ref, current_configuration_releases_new, configurations, change_configuration
+from app.inforeleases import available_configurations, current_configuration_releases, configuration_release_table, external_ref, soft_ref, current_configuration_releases_new, configurations, change_configuration, user_configurations_all
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
 from app.forms import LoginForm
@@ -16,7 +16,7 @@ def index():
     return render_template('index.html', title='Релизы',
                            external_links=external_ref(),
                            soft_links=soft_ref(),
-                           releases=current_configuration_releases_new())
+                           releases=current_configuration_releases_new(current_user))
 
 
 @app.route("/admin")
@@ -29,10 +29,11 @@ def admin():
                            form=form)
 
 
-@app.route("/profile")
+@app.route("/profile", methods=['GET', 'POST'])
 @login_required
 def profile():
-    return render_template('profile.html', title='Релизы: Профиль')
+    return render_template('profile.html', title='Релизы: Профиль',
+                           user_configurations_all=user_configurations_all(current_user))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -63,7 +64,7 @@ def set_configuration():
     configuration = dict(request.json['configuration'])
     action = request.json['action']
 
-    result = change_configuration(configuration, action)
+    result = change_configuration(current_user, configuration, action)
 
     return jsonify(result)
 
@@ -71,19 +72,19 @@ def set_configuration():
 @app.route('/api/configuration', methods=['GET'])
 # @cache.cached(timeout=1800)
 def get_available_configurations():
-    return jsonify(available_configurations())
+    return jsonify(available_configurations(current_user))
 
 
 @app.route('/api/configuration/UpdInfo', methods=['GET'])
 @cache.cached(timeout=1800)
 def get_current_configuration_releases():
-    return jsonify(current_configuration_releases())
+    return jsonify(current_configuration_releases(current_user))
 
 
 @app.route('/api/<configuration>/v8upd11', methods=['GET'])
 @cache.cached(timeout=1800)
 def get_configuration_release_table(configuration):
-    return jsonify(configuration_release_table(configuration))
+    return jsonify(configuration_release_table(current_user, configuration))
 
 
 @app.route('/api/instance_path', methods=['GET'])

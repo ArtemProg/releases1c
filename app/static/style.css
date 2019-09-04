@@ -858,6 +858,15 @@ body {
     border: none;
 }
 
+.checkbox {
+    cursor: pointer;
+    display: inline-block;
+    height: 26px;
+    width: 26px;
+    background-color: inherit;
+    border: 1px solid;
+}
+
 .margin-top-50 {
     margin-top: 50px;
 }

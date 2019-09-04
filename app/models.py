@@ -36,7 +36,7 @@ class User(UserMixin, db.Model):
             self.configurations.append(configuration)
 
     def configuration_remove(self, configuration):
-        if not self.configuration_exists(configuration):
+        if self.configuration_exists(configuration):
             self.configurations.remove(configuration)
 
     def configuration_exists(self, configuration):
@@ -49,7 +49,7 @@ class User(UserMixin, db.Model):
             .outerjoin(followers,
                        db.and_(Configuration.id == followers.c.configuration_id, self.id == followers.c.user_id))\
             .filter(Configuration.active == True).order_by(Configuration.description)
-        return query
+        return query.all()
 
 
 class Configuration(db.Model):

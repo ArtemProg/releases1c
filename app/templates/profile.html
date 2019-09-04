@@ -6,6 +6,8 @@
         <ul class="nav__list nav-page">
             <li class="nav__item">
                 <a class="link nav__link" href="#profile-user">Данные пользователя</a>
+            </li>
+            <li class="nav__item">
                 <a class="link nav__link" href="#selected-configuration">Выбранные конфигурации</a>
             </li>
         </ul>
@@ -42,35 +44,42 @@
                 <h2 class="title">Выбранные конфигурации</h2>
             </div>
             <div class="page-content">
-
-                <div class="table-responsive">
-                    <table class="table font-size-small-sm">
-                        <thead class="table__thead">
-                            <tr class="table__row">
-                                <th class="table__cell table__cell--header table__cell--number-row">№</th>
-                                <th class="table__cell table__cell--header table__cell--name-head">description</th>
-                                <th class="table__cell table__cell--header">active</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table__tbody" id="admin-configuration-setting">
-<!--                            {% for configuration in configurations %}-->
-<!--                            <tr class="table__row">-->
-<!--                                <td class="table__cell table__cell&#45;&#45;number-row" data-id="{{ configuration.id }}">{{ configurations.index(configuration)+1 }}</td>-->
-<!--                                <td class="table__cell" data-parameter="description">{{ configuration.description }}</td>-->
-<!--                                <td class="table__cell">-->
-<!--                                    <button class="setting__element action-element btn" data-action="edit" data-controls="admin-configuration-setting" title="Редактировать конфигурацию">&#9998;</button>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                            {% endfor %}-->
-                        </tbody>
-                    </table>
-                </div>
-
+                <form name="subscribeForm"  method="post">
+                    <div class="setting">
+                        <div class="setting__box">
+                            <div class="setting__item">
+                                <button class="setting__element action-element btn" data-action="save" data-controls="profile-configuration-setting" title="Сохранить изменения">Сохранить</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table font-size-small-sm">
+                            <thead class="table__thead">
+                                <tr class="table__row">
+                                    <th class="table__cell table__cell--header table__cell--number-row">№</th>
+                                    <th class="table__cell table__cell--header table__cell--name-head">description</th>
+                                    <th class="table__cell table__cell--header">active</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table__tbody" id="profile-configuration-setting">
+                                {% for properties in user_configurations_all %}
+                                <tr class="table__row">
+                                    <td class="table__cell table__cell--number-row" data-id="{{ properties['configuration'].id }}">{{ properties['number'] }}</td>
+                                    <td class="table__cell" data-parameter="description">{{ properties['configuration'].description }}</td>
+                                    <td class="table__cell">
+                                        <input type="checkbox" data-id="{{ properties['configuration'].id }}" name="conf_id_{{ properties['configuration'].id }}" title="Включить/выключить отображение" {% if properties['active'] %}checked{% endif %}>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
             </div>
         </article>
     </div>
 {% endblock %}
 
 {% block script %}
-
+<script src="static/script-profile.js"></script>
 {% endblock %}

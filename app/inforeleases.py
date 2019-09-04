@@ -10,28 +10,43 @@ from app.models import Configuration, Release
 from app import db
 
 
-def available_configurations():
-    return [{'project': conf.project, 'name': conf.name, 'edition': conf.edition, 'description': conf.description} for conf in Configuration.query.filter_by(active=True).all()]
+def available_configurations(user):
+    if user.is_authenticated and user.configurations.filter_by(active=True).count() > 0:
+        confs = user.configurations.filter_by(active=True).all()
+    else:
+        confs = Configuration.query.filter_by(active=True).order_by(Configuration.description).all()
+    return [{'project': conf.project, 'name': conf.name, 'edition': conf.edition, 'description': conf.description}
+            for conf in confs]
 
 
 def configurations():
     return Configuration.query.all()
 
 
-def current_configuration_releases_new():
-    r = list()
-    for configuration in Configuration.query.filter_by(active=True).order_by(Configuration.description).all():
+def user_configurations_all(user):
+    configurations_all = user.configurations_all()
+    return [{'number': i+1, 'configuration': configurations_all[i][0], 'active':configurations_all[i][1]}
+            for i in range(len(configurations_all))]
+
+
+def current_configuration_releases_new(current_user):
+    releases = list()
+    if current_user.is_authenticated and current_user.configurations.filter_by(active=True).count() > 0:
+        confs = current_user.configurations.filter_by(active=True).all()
+    else:
+        confs = Configuration.query.filter_by(active=True).order_by(Configuration.description).all()
+    for configuration in confs:
         release = configuration.releases.order_by(Release.date.desc()).first()
         if not (release is None):
-            r.append(release)
-    return r
+            releases.append(release)
+    return releases
 
 
-def current_configuration_releases():
+def current_configuration_releases(user):
     result = {'Data': None, 'Error': False, 'TextError': ''}
 
     list_releases_configurations = []
-    for dict_config in available_configurations():
+    for dict_config in available_configurations(user):
         data_configuration = current_configuration_release(dict_config)
         if data_configuration['Error']:
             return data_configuration
@@ -69,10 +84,10 @@ def converting_date_iso(date_str):
     return date_update_tz.isoformat()
 
 
-def configuration_release_table(project):
+def configuration_release_table(user, project):
     result = {'Data': None, 'Error': False, 'TextError': '', 'DataCount': 0}
 
-    all_configurations = {dict_config['project']: dict_config for dict_config in available_configurations()}
+    all_configurations = {dict_config['project']: dict_config for dict_config in available_configurations(user)}
 
     if project not in all_configurations:
         result['TextError'] = 'Конфигурация не найдена'
@@ -160,15 +175,17 @@ def soft_ref():
     return list_ref
 
 
-def change_configuration(configuration, action):
+def change_configuration(user, configuration, action):
     result = {'Data': None, 'Error': False, 'TextError': ''}
 
     if action == 'append':
-        result = add_configuration(configuration)
+        result = add_configuration(user, configuration)
     elif action == 'delete':
-        result = delete_configuration(configuration)
+        result = delete_configuration(user, configuration)
     elif action == 'edit':
-        result = edit_configuration(configuration)
+        result = edit_configuration(user, configuration)
+    elif action == 'profile-save':
+        result = user_save_configuration(user, configuration)
     else:
         result['Error'] = True
         result['TextError'] = 'Выбранное действие не найдено'
@@ -176,7 +193,7 @@ def change_configuration(configuration, action):
     return result
 
 
-def add_configuration(dict_conf):
+def add_configuration(user, dict_conf):
     result = {'Data': None, 'Error': False, 'TextError': ''}
 
     if Configuration.query.filter((Configuration.project == dict_conf['project']) | (
@@ -194,7 +211,7 @@ def add_configuration(dict_conf):
     return result
 
 
-def delete_configuration(dict_conf):
+def delete_configuration(user, dict_conf):
     result = {'Data': None, 'Error': False, 'TextError': ''}
 
     db.session.query(Release).filter_by(configuration_id=dict_conf['id']).delete()
@@ -204,7 +221,7 @@ def delete_configuration(dict_conf):
     return result
 
 
-def edit_configuration(dict_conf):
+def edit_configuration(user, dict_conf):
     result = {'Data': None, 'Error': False, 'TextError': ''}
 
     conf = Configuration.query.filter_by(id=dict_conf['id']).first()
@@ -238,3 +255,18 @@ def edit_configuration(dict_conf):
         result['TextError'] = 'Конфигурация не найдена'
 
     return result
+
+
+def user_save_configuration(user, configurations):
+    save_db = False
+    configurations_all = user.configurations_all()
+    for configuration, active in configurations_all:
+        configuration_exists = str(configuration.id) in configurations['id']
+        if configuration_exists and not active:
+            user.configuration_append(configuration)
+            save_db = True
+        elif not configuration_exists and active:
+            user.configuration_remove(configuration)
+            save_db = True
+    if save_db:
+        db.session.commit()
