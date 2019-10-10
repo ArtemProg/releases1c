@@ -62,21 +62,28 @@ def dict_configuration(project, name, edition, description):
 
 
 def current_configuration_release(conf):
-
     url = '%s/ipp/ITSREPV/V8Update/Configs/%s/%s/83/UpdInfo.txt' % (
         'http://downloads.1c.ru', conf.name, conf.edition)
     res = requests.get(url)
-    res.encoding = 'utf_8_sig'
+    if res.status_code != 200:
+        log(url)
+        log(str(res.status_code) + '; ' + res.reason)
+        return None
+    try:
+        res.encoding = 'utf_8_sig'
 
-    list_res = res.text.splitlines()
-    version = list_res[0].replace('Version=', '')
-    from_versions = list_res[1].replace('FromVersions=', '')
-    update_date = list_res[2].replace('UpdateDate=', '')
+        list_res = res.text.splitlines()
+        version = list_res[0].replace('Version=', '')
+        from_versions = list_res[1].replace('FromVersions=', '')
+        update_date = list_res[2].replace('UpdateDate=', '')
 
-    date = timezone('Europe/Moscow').localize(datetime.strptime(update_date, '%d.%m.%Y'), is_dst=None)
-    date_utc = date.astimezone(utc)
+        date = timezone('Europe/Moscow').localize(datetime.strptime(update_date, '%d.%m.%Y'), is_dst=None)
+        date_utc = date.astimezone(utc)
 
-    return {'version': version, 'from_versions': from_versions, 'date': date_utc}
+        return {'version': version, 'from_versions': from_versions, 'date': date_utc}
+    except Exception as ex:
+        log(url)
+        log(str(ex))
 
 
 def add_release(conf, data_release):
