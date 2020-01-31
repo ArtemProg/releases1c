@@ -307,10 +307,6 @@ body {
 	border-top: solid 1px #A9A9A9;
 }
 
-.calculator-updates__result-list {
-	height: auto;
-}
-
 .calculator-updates__row {
 	background-color: #8dba69;
 }
